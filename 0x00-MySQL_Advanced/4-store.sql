@@ -2,10 +2,10 @@
 -- The quantity in the 'items' table will be reduced based on the number of items ordered.
 
 -- Drop the trigger if it already exists
-DROP TRIGGER IF EXISTS decrease_quantity_on_order;
+DROP TRIGGER IF EXISTS decreases_quantity;
 
 -- Create the trigger for updating item quantity
-CREATE TRIGGER decrease_quantity_on_order
+CREATE TRIGGER decreases_quantity
 AFTER INSERT ON orders
 FOR EACH ROW
 BEGIN
