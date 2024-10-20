@@ -1,27 +1,26 @@
--- Script to create the ComputeAverageScoreForUser stored procedure
-
 -- Drop the procedure if it already exists
 DROP PROCEDURE IF EXISTS ComputeAverageScoreForUser;
-
--- Create the ComputeAverageScoreForUser procedure
 DELIMITER $$
 
+-- Create the ComputeAverageScoreForUser procedure
 CREATE PROCEDURE ComputeAverageScoreForUser(
     IN user_id INT
 )
 BEGIN
     DECLARE avg_score FLOAT;
 
-    -- Compute the average score for the user
-    SELECT AVG(score) INTO avg_score
-    FROM corrections
-    WHERE user_id = user_id;
+    -- Calculate the average score for the given user_id
+    SET avg_score = (SELECT IFNULL(AVG(score), 0) 
+                     FROM corrections 
+                     WHERE user_id = user_id);
 
     -- Update the user's average_score in the users table
-    UPDATE users
-    SET average_score = IFNULL(avg_score, 0)
+    UPDATE users 
+    SET average_score = avg_score 
     WHERE id = user_id;
+END
+$$
+DELIMITER ;
 
-END $$
-
+-- Reset DELIMITER back to the default
 DELIMITER ;
