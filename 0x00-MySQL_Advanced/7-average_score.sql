@@ -1,3 +1,5 @@
+-- implement a stored procedure that computes and stores the average weighted score for a student
+
 -- Drop the procedure if it already exists
 DROP PROCEDURE IF EXISTS ComputeAverageScoreForUser;
 DELIMITER $$
