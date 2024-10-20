@@ -23,6 +23,3 @@ BEGIN
 END
 $$
 DELIMITER ;
-
--- Reset DELIMITER back to the default
-DELIMITER ;
