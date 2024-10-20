@@ -8,9 +8,4 @@ DROP TRIGGER IF EXISTS decreases_quantity;
 CREATE TRIGGER decreases_quantity
 AFTER INSERT ON orders
 FOR EACH ROW
-BEGIN
-    -- Update the 'items' table to decrease the quantity of the ordered item
-    UPDATE items
-    SET quantity = quantity - NEW.number
-    WHERE name = NEW.item_name;
-END;
+UPDATE items SET quantity = quantity - NEW.number WHERE name = NEW.item_name;
