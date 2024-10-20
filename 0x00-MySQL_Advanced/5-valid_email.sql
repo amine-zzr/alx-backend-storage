@@ -9,7 +9,7 @@ BEFORE UPDATE ON users
 FOR EACH ROW
 BEGIN
     -- Reset 'valid_email' to 0 if the email has been changed
-    IF NEW.email <> OLD.email THEN
+    IF NEW.email != OLD.email AND OLD.valid_email = 1 THEN
         SET NEW.valid_email = 0;
     END IF;
 END;
