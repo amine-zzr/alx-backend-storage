@@ -5,7 +5,7 @@ This module provides a Cache class to interface with Redis.
 
 import redis
 import uuid
-from typing import Union
+from typing import Union, Callable, Optional
 
 
 class Cache:
@@ -36,3 +36,48 @@ class Cache:
         key = str(uuid.uuid4())  # Generate a random key
         self._redis.set(key, data)  # Store data in Redis
         return key
+
+    def get(self, key: str,
+            fn: Optional[Callable] = None) -> Union[str, bytes, int, None]:
+        """
+        Retrieves the data stored at the given key from Redis.
+        Optionally applies a callable function to convert the data
+
+        Args:
+            key (str): The key for the data in Redis.
+            fn (Optional[Callable]): A function to apply to the retrieved data.
+
+        Returns:
+            Union[str, bytes, int, None]: The data retrieved from Redis
+        """
+        data = self._redis.get(key)  # Get data from Redis
+        if data is None:
+            return None  # Return None if key doesn't exist
+
+        if fn:
+            return fn(data)  # Apply the callable if provided
+        return data  # Default behavior: return raw data (bytes)
+
+    def get_str(self, key: str) -> Optional[str]:
+        """
+        Retrieves the data stored at the given key as a UTF-8 decoded string.
+
+        Args:
+            key (str): The key for the data in Redis.
+
+        Returns:
+            Optional[str]: The data decoded as a UTF-8 string, or None
+        """
+        return self.get(key, fn=lambda d: d.decode("utf-8"))
+
+    def get_int(self, key: str) -> Optional[int]:
+        """
+        Retrieves the data stored at the given key as an integer.
+
+        Args:
+            key (str): The key for the data in Redis.
+
+        Returns:
+            Optional[int]: The data converted to an integer, or None
+        """
+        return self.get(key, fn=lambda d: int(d))
